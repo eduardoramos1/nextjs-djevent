@@ -1,6 +1,6 @@
 import styles from "./../styles/Footer.module.css"
 
-import Link from "next/dist/client/link"
+import Link from "next/link"
 
 export default function Footer() {
     return (
