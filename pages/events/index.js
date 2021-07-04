@@ -1,9 +1,30 @@
 import Layout from '@/components/Layout';
+import EventItem from '@/components/EventItem';
 
-export default function EventsPage() {
+import { API_URL } from '@/config/index';
+
+export default function EventesPage({ events }) {
+
   return (
-    <Layout title="Meus Eventos">
-      <h1>Meus Eventos</h1>
+    <Layout>
+      <h1>Eventos</h1>
+      {events.length === 0 && <h3>Sem eventos para mostrar</h3> }
+
+      {events.map(evt => (
+        <EventItem evt={evt} key={evt.id} />
+      ))}
     </Layout>
   );
+}
+
+// getServerSideProps vai executar toda vez que entrar nesta página, o código é executado do lado do servidor
+// getStaticProps executa em build time ( quando executa next build para construir a aplicação para produção, porém funciona no dev server também), bom para quando temos dados que não se alteram constantemente. Revalidate verifica se houve mudança nos dados a cada x segundos
+export async function getStaticProps() {
+  const res = await fetch(API_URL + '/api/events');
+  const events = await res.json();
+
+  return {
+    props: { events },
+    revalidate: 1,
+  };
 }
